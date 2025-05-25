@@ -639,8 +639,12 @@ def gecmis():
 
     return render_template('gecmis.html', gecmis=gecmis_listesi)
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+#if __name__ == '__main__':
+ #   with app.app_context():
+  #      db.create_all()
+   # app.run(debug=True)
+
+import os
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT" , 5000)))
 
