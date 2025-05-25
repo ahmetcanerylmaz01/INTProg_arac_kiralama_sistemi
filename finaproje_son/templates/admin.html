@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Paneli{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand text-primary fw-bold" href="#">ArabaKirala Dashboard</a>
+    <div class="d-flex ms-auto">
+      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary me-2">Siteye Dön</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Çıkış</a>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 max-w-4xl mx-auto">
+  <h2 class="text-center mb-4 fw-bold">Admin Paneli</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="mb-4">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('admin_arac_ekle') }}" enctype="multipart/form-data" class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+
+    <h2 class="text-2xl font-bold mb-4">Araç Ekle</h2>
+
+    <div class="mb-3">
+      <label class="form-label">Marka</label>
+      <input type="text" name="marka" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Model</label>
+      <input type="text" name="model" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Yıl</label>
+      <input type="number" name="yil" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Fiyat (₺ / gün)</label>
+      <input type="number" name="fiyat" class="form-control" step="0.01" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Vites</label>
+      <select name="vites" class="form-select" required>
+        <option value="">Seçiniz</option>
+        <option value="Manuel">Manuel</option>
+        <option value="Otomatik">Otomatik</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Yakıt</label>
+      <select name="yakit" class="form-select" required>
+        <option value="">Seçiniz</option>
+        <option value="Benzin">Benzin</option>
+        <option value="Dizel">Dizel</option>
+        <option value="Elektrik">Elektrik</option>
+        <option value="Hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Renk</label>
+      <input type="text" name="renk" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Fotoğraf</label>
+      <input type="file" name="foto" class="form-control" accept="image/*">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Araç Ekle</button>
+  </form>
+
+  <h3 class="mt-5 mb-3">Araç Listesi</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Marka</th>
+        <th>Model</th>
+        <th>Yıl</th>
+        <th>Fiyat (₺)</th>
+        <th>İşlem</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for arac in araclar %}
+      <tr>
+        <td>{{ arac.marka }}</td>
+        <td>{{ arac.model }}</td>
+        <td>{{ arac.yil }}</td>
+        <td>{{ "%.2f"|format(arac.fiyat) }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('arac_sil', arac_id=arac.id) }}" onsubmit="return confirm('Bu aracı silmek istediğinize emin misiniz?');">
+            <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" class="text-center">Kayıtlı araç bulunamadı.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

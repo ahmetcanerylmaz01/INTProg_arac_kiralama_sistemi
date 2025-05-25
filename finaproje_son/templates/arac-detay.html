@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ arac.marka }} {{ arac.model }} Detay | Araba Kirala{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-2">
+  <a class="navbar-brand fw-bold text-primary" href="{{ url_for('index') }}">ArabaKirala</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Ana Sayfa</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('kirala') }}">Araç Kirala</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('gecmis') }}">Geçmiş</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Çıkış</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container my-10 max-w-6xl mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+    <img src="{{ url_for('static', filename='uploads/' ~ (arac.foto if arac.foto else 'default_car.jpg')) }}" alt="{{ arac.marka }} {{ arac.model }}" class="w-full h-auto rounded shadow-lg object-cover">
+
+    <div>
+      <h1 class="text-3xl font-bold mb-4">{{ arac.marka }} {{ arac.model }} {{ arac.yil }}</h1>
+      <p class="text-gray-700 mb-2">Günlük Fiyat: <span class="fw-bold text-primary fs-5">{{ "%.2f"|format(arac.fiyat) }}₺</span></p>
+      <p class="text-gray-700 mb-4">Vites: <strong>{{ arac.vites }}</strong> | Yakıt: <strong>{{ arac.yakit }}</strong> | Klima: <strong>{{ "Var" if arac.klima else "Yok" }}</strong></p>
+      <table class="table table-bordered mb-4">
+        <tbody>
+          <tr><th>Model</th><td>{{ arac.yil }}</td></tr>
+          <tr><th>Marka</th><td>{{ arac.marka }}</td></tr>
+          <tr><th>Vites</th><td>{{ arac.vites }}</td></tr>
+          <tr><th>Yakıt</th><td>{{ arac.yakit }}</td></tr>
+          <tr><th>Renk</th><td>{{ arac.renk }}</td></tr>
+        </tbody>
+      </table>
+      <a href="{{ url_for('kirala', arac_id=arac.id) }}" class="btn btn-primary btn-lg">Şimdi Kirala</a>
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold mb-4">Kullanıcı Yorumları</h2>
+    {% if yorumlar %}
+      {% for yorum in yorumlar %}
+        <div class="bg-white p-4 rounded shadow mb-4">
+          <p class="mb-2 fst-italic">"{{ yorum.metin }}"</p>
+          <span class="text-sm text-gray-600">- {{ yorum.kullanici }}</span>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Henüz yorum yok.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-gray-100 py-6 mt-10 text-center text-sm text-gray-600">
+  <div class="container">
+    <div class="d-flex justify-content-center gap-3 mb-2">
+      <a href="#" class="text-gray-600">Hakkımızda</a>
+      <a href="#" class="text-gray-600">İletişim</a>
+      <a href="#" class="text-gray-600">SSS</a>
+    </div>
+    <p>© 2025 ArabaKirala. Tüm hakları saklıdır.</p>
+  </div>
+</footer>
+{% endblock %}

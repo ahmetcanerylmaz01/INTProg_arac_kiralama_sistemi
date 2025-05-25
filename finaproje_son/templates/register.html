@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt Ol | ArabaKirala{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-[#f9fafb] text-[#1f2937]">
+  <div class="bg-white p-6 rounded-lg shadow w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">Kayıt Ol</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="mb-3">
+          {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/register">
+      <div class="mb-3">
+        <label class="form-label">Ad Soyad</label>
+        <input name="name" type="text" class="form-control" placeholder="Adınız ve soyadınız" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">E-posta</label>
+        <input name="email" type="email" class="form-control" placeholder="ornek@mail.com" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Şifre</label>
+        <input name="password" type="password" class="form-control" placeholder="Şifrenizi girin" required />
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mt-2">Kayıt Ol</button>
+      <div class="text-center mt-3">
+        <a href="/login" class="text-primary">Zaten hesabınız var mı? Giriş yap</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

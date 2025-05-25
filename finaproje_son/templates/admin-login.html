@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Girişi{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
+    <h2 class="text-2xl font-bold mb-6 text-center">Admin Girişi</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <div class="mb-4">
+        <label class="form-label font-semibold">E-posta</label>
+        <input type="email" name="email" class="form-control" placeholder="admin@mail.com" required autofocus>
+      </div>
+      <div class="mb-4">
+        <label class="form-label font-semibold">Şifre</label>
+        <input type="password" name="password" class="form-control" placeholder="Şifreniz" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

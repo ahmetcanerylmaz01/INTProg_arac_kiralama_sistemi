@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Araç Kiralama - Ana Sayfa{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-3 mb-6">
+  <a class="navbar-brand text-[#3b82f6] fw-bold" href="/">ArabaKirala</a>
+  <div class="ms-auto d-flex align-items-center gap-3">
+    <a class="nav-link text-[#4b5563]" href="/login">Giriş</a>
+    <a class="nav-link text-[#4b5563]" href="/register">Kayıt</a>
+    <a class="nav-link text-[#4b5563]" href="/admin-login">Admin Girişi</a>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="text-center py-10 bg-[#e0f2fe]">
+  <h1 class="text-4xl font-bold mb-2">Hayalindeki Aracı Kirala</h1>
+  <p class="text-lg text-[#4b5563]">En iyi araçlar, en uygun fiyatlarla!</p>
+  <a href="#araclar" class="btn btn-primary mt-4 px-4 py-2">Araçlara Göz At</a>
+</section>
+
+<!-- Araç Listesi -->
+<section id="araclar" class="p-6">
+  <h2 class="text-3xl font-bold mb-6 text-center text-[#1f2937]">Mevcut Araçlar</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for arac in araclar %}
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+       <img src="{{ url_for('static', filename='uploads/' ~ (arac.foto if arac.foto else 'default_car.jpg')) }}"class="card-img-top object-cover" style="height: 200px; object-fit: cover;" alt="Araç Fotoğrafı">
+      <div class="p-4">
+        <h3 class="text-xl font-semibold mb-2">{{ arac.marka }} {{ arac.model }}</h3>
+        <p class="text-sm text-[#4b5563]">Yıl: {{ arac.yil }}</p>
+        <p class="text-sm text-[#4b5563]">Renk: {{ arac.renk }}</p>
+        <p class="text-sm text-[#4b5563]">Vites: {{ arac.vites }}</p>
+        <p class="text-sm text-[#4b5563] mb-2">Yakıt: {{ arac.yakit }}</p>
+        <p class="text-lg font-bold text-[#3b82f6] mb-3">{{ arac.fiyat }}₺ / gün</p>
+        <div class="flex gap-2">
+          <a href="/kirala?arac_id={{ arac.id }}" class="btn btn-primary flex-1">Kirala</a>
+          <a href="/arac-detay/{{ arac.id }}" class="btn btn-outline-secondary flex-1">Detay</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if not araclar %}
+    <p class="text-center text-gray-600 mt-6">Şu anda sistemde listelenen araç bulunmamaktadır.</p>
+  {% endif %}
+</section>
+
+<!-- FAQ -->
+<section class="py-12">
+  <div class="container mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-6">Sıkça Sorulan Sorular</h2>
+    <div class="bg-white p-6 rounded-xl shadow-md mb-4">
+      <h4 class="font-semibold text-lg text-[#3b82f6]">Araç kiralamak için gerekli belgeler nelerdir?</h4>
+      <p class="text-[#4b5563]">Geçerli bir kimlik kartı ve ehliyet yeterlidir.</p>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-md mb-4">
+      <h4 class="font-semibold text-lg text-[#3b82f6]">Araç teslimi ve teslim alma işlemleri nasıl yapılır?</h4>
+      <p class="text-[#4b5563]">Araç teslimatı, ofisimizde yapılmaktadır. Teslimat saati ve yeri önceden belirlenebilir.</p>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-md mb-4">
+      <h4 class="font-semibold text-lg text-[#3b82f6]">Fiyatlar sabit mi yoksa değişebilir mi?</h4>
+      <p class="text-[#4b5563]">Fiyatlar, talep edilen tarih ve araç modeline göre değişiklik gösterebilir. Önceden rezervasyon yaparak daha uygun fiyatlardan yararlanabilirsiniz.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Araç Kiralama | ArabaKirala{% endblock %}
+
+{% block content %}
+<div class="container my-5 max-w-2xl">
+  <h1 class="text-3xl font-bold mb-6 text-center">Araç Kiralama Formu</h1>
+
+  <!-- Flash Mesajları -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="mb-4">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('kirala') }}" class="bg-white p-6 rounded shadow">
+    <div class="mb-3">
+      <label class="form-label">Ad Soyad</label>
+      <input type="text" name="ad_soyad" class="form-control" placeholder="Adınızı giriniz" 
+             value="{{ request.form.ad_soyad or '' }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">E-posta</label>
+      <input type="email" name="email" class="form-control" placeholder="ornek@mail.com" 
+             value="{{ request.form.email or '' }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Telefon</label>
+      <input type="tel" name="telefon" class="form-control" placeholder="05xx xxx xx xx" 
+             value="{{ request.form.telefon or '' }}" required>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Başlangıç Tarihi</label>
+        <input type="date" name="baslangic_tarihi" class="form-control" 
+               value="{{ request.form.baslangic_tarihi or '' }}" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Bitiş Tarihi</label>
+        <input type="date" name="bitis_tarihi" class="form-control" 
+               value="{{ request.form.bitis_tarihi or '' }}" required>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Teslim Alma Yeri</label>
+      <input type="text" name="teslim_yeri" class="form-control" placeholder="Örn: İstanbul Havalimanı" 
+             value="{{ request.form.teslim_yeri or '' }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Araç Seçimi</label>
+      <select name="arac_secimi" required>
+  {% for arac in araclar %}
+    <option value="{{ arac.id }}">{{ arac.marka }} - {{ arac.model }}</option>
+  {% endfor %}
+</select>
+
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mt-3">Kiralamayı Tamamla</button>
+  </form>
+</div>
+{% endblock %}

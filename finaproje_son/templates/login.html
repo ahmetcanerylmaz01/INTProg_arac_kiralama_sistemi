@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Giriş Yap | ArabaKirala{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-[#f9fafb]">
+  <div class="bg-white p-6 rounded-lg shadow w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center text-[#1f2937]">Giriş Yap</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="mb-3">
+          {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/login">
+      <div class="mb-3">
+        <label class="form-label">E-posta</label>
+        <input name="email" type="email" class="form-control" placeholder="ornek@mail.com" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Şifre</label>
+        <input name="password" type="password" class="form-control" placeholder="Şifrenizi girin" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+    </form>
+
+    <div class="text-center mt-4">
+      <span class="text-sm text-gray-600">Hesabın yok mu?</span>
+      <a href="/register" class="text-primary fw-semibold">Kayıt Ol</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

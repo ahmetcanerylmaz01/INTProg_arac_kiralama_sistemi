@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Profilim | ArabaKirala{% endblock %}
+
+{% block content %}
+<main class="container mx-auto py-8">
+  <h1 class="text-3xl font-bold mb-6 text-center text-[#1f2937]">Profil Bilgilerim</h1>
+
+  <form method="POST" action="{{ url_for('profil') }}" class="bg-white p-6 rounded-lg shadow max-w-lg mx-auto">
+    <div class="mb-4">
+      <label class="form-label font-semibold">Ad Soyad</label>
+      <input type="text" name="ad_soyad" class="form-control" value="{{ user.ad_soyad }}" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label font-semibold">E-posta</label>
+      <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label font-semibold">Telefon</label>
+      <input type="text" name="telefon" class="form-control" value="{{ user.telefon }}">
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label font-semibold">Ehliyet No</label>
+      <input type="text" name="ehliyet_no" class="form-control" value="{{ user.ehliyet_no }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-4">Bilgileri Güncelle</button>
+  </form>
+</main>
+{% endblock %}

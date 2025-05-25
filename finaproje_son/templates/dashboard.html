@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Kullanıcı Dashboard | ArabaKirala{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand text-blue-600 font-bold" href="{{ url_for('index') }}">ArabaKirala</a>
+    <div class="d-flex ms-auto">
+      <a href="{{ url_for('profil') }}" class="btn btn-outline-secondary me-2">Profilim</a>
+      <a href="{{ url_for('gecmis') }}" class="btn btn-outline-secondary me-2">Kiralama Geçmişi</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Çıkış</a>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="container mx-auto py-8">
+  <h1 class="text-3xl font-bold mb-6">Hoşgeldin, {{ kullanici_ad }}!</h1>
+
+  <!-- Flash Mesajları -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="mb-4">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Özet Kartlar -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <h2 class="text-xl font-semibold">Mevcut Rezervasyon</h2>
+      <p class="text-3xl font-bold text-green-600">{{ mevcut_rez }}</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <h2 class="text-xl font-semibold">Geçmiş Rezervasyon</h2>
+      <p class="text-3xl font-bold text-blue-600">{{ gecmis_rez }}</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <h2 class="text-xl font-semibold">Favori Araçlar</h2>
+      <p class="text-3xl font-bold text-red-600">{{ favoriler }}</p>
+    </div>
+  </div>
+
+  <!-- Yaklaşan Rezervasyon -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Yaklaşan Rezervasyon</h2>
+    {% if yaklasan %}
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="font-semibold">{{ yaklasan.arac }}</h3>
+          <p class="text-sm text-gray-600">{{ yaklasan.baslangic }} - {{ yaklasan.bitis }}</p>
+        </div>
+        
+      </div>
+    {% else %}
+      <p>Yaklaşan rezervasyonunuz bulunmamaktadır.</p>
+    {% endif %}
+  </section>
+
+  <!-- Son Aktivite -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Son Aktiviten</h2>
+    {% if aktiviteler %}
+      <ul class="list-group">
+        {% for aktivite in aktiviteler %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ aktivite.aciklama }}
+            <span class="badge bg-primary rounded-pill">{{ aktivite.tarih }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Henüz bir aktiviteniz yok.</p>
+    {% endif %}
+  </section>
+
+  <!-- Kirala Butonu -->
+  <div class="text-center mt-10">
+    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#kiralaModal">
+      Araç Kirala
+    </button>
+  </div>
+
+  <!-- Kirala Modal -->
+  <div class="modal fade" id="kiralaModal" tabindex="-1" aria-labelledby="kiralaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="kiralaModalLabel">Araç Kiralama Formu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{ url_for('kirala') }}">
+            <div class="mb-3">
+              <label for="ad_soyad" class="form-label">Ad Soyad</label>
+              <input type="text" id="ad_soyad" name="ad_soyad" class="form-control" placeholder="Adınızı giriniz" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-posta</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="ornek@mail.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="telefon" class="form-label">Telefon</label>
+              <input type="tel" id="telefon" name="telefon" class="form-control" placeholder="05xx xxx xx xx" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="baslangic_tarihi" class="form-label">Başlangıç Tarihi</label>
+                <input type="date" id="baslangic_tarihi" name="baslangic_tarihi" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="bitis_tarihi" class="form-label">Bitiş Tarihi</label>
+                <input type="date" id="bitis_tarihi" name="bitis_tarihi" class="form-control" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="teslim_yeri" class="form-label">Teslim Alma Yeri</label>
+              <input type="text" id="teslim_yeri" name="teslim_yeri" class="form-control" placeholder="Örn: İstanbul Havalimanı" required>
+            </div>
+            <div class="mb-3">
+              <label for="arac_secimi" class="form-label">Araç Seçimi</label>
+              <select id="arac_secimi" name="arac_secimi" class="form-select" required>
+                <option value="" disabled selected>Seçiniz</option>
+                {% for arac in araclar %}
+                  <option value="{{ arac.id }}">{{ arac.marka }} {{ arac.model }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-3">Kiralamayı Tamamla</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-white text-center py-4 mt-8 shadow-inner">
+  <p class="text-sm text-gray-500">© 2025 ArabaKirala</p>
+</footer>
+{% endblock %}

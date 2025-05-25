@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Kiralama Geçmişi | ArabaKirala{% endblock %}
+
+{% block content %}
+<div class="container my-10">
+  <h1 class="text-2xl font-bold mb-4">Kiralama Geçmişi</h1>
+  <div class="bg-white shadow rounded p-4 overflow-auto">
+    {% if gecmis %}
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Araç</th>
+            <th scope="col">Tarih</th>
+            <th scope="col">Süre</th>
+            <th scope="col">Teslim Yeri</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for kayit in gecmis %}
+            <tr>
+              <td>{{ kayit.arac }}</td>
+              <td>{{ kayit.baslangic }} - {{ kayit.bitis }}</td>
+              <td>{{ kayit.sure }}</td>
+              <td>{{ kayit.teslim_yeri }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="text-gray-600">Henüz kiralama geçmişiniz yok.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
